@@ -1,0 +1,42 @@
+一.调度服务相关配置
+1.修改控制节点上的nova.conf
+scheduler_default_filters=AggregateInstanceExtraSpecsFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter
+2.重启
+systemctl restart openstack-nova-api.service openstack-nova-scheduler.service openstack-nova-conductor.service
+
+
+二.虚拟机迁移
+1.计算节点更新组件
+yum install libvirt qemu-* -y
+2.修改计算节点相关配置
+修改/etc/sysconfig/libvirtd 文件。
+LIBVIRTD_ARGS="--listen"
+在/etc/libvirt/libvirtd.conf 文件中做如下配置。
+listen_tls=0
+listen_tcp=1
+auth_tcp="none"
+3.重启计算主机
+reboot
+
+附基于NFS共享存储进行在线迁移：
+1.在NFS服务器上设置挂载点
+mkdir /data
+修改/etc/exports文件:
+/data compute-node-01(rw,sync,fsid=0,no_root_squash)  compute-node-02(rw,sync,fsid=0,no_root_squash)
+重启nfs服务
+2.在所有计算节点上完成以下操作
+a.安装
+yum install -y nfs-utils
+systemctl enable rpcbind.service
+systemctl start rpcbind.service
+b.挂载
+mount -t nfs4 nfs服务器IP:/data    /var/lib/nova/instances 
+3.注意检查mount以后/var/lib/nova/instances的文件夹所有者及权限
+
+
+
+#!/bin/sh
+passwd cirros<<EOF
+123456
+123456
+EOF

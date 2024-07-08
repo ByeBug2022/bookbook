@@ -1,0 +1,32 @@
+﻿一.准备
+1.基于网络节点虚拟机，复制一个新的虚拟机，命名netwrok-node-02,并修改hosts文件及neutron配置目录下的plugin.ini
+2.在两个网络节点上安装keepalived
+yum install openssl openssl-devel -y
+3.下载并编译安装keepalived
+
+二、控制节点修改
+1.neutron.conf
+[DEFAULT]
+router_distributed = False
+l3_ha = True
+l3_ha_net_cidr = 192.168.57.0/24    #浮动IP所在网络网段
+max_l3_agents_per_router = 3   #router 最多在几个 L3 agent 上创建 instance
+min_l3_agents_per_router = 2   ##router 最少在几个 L3 agent 上创建 instance
+dhcp_agents_per_network = 2    #创建几个dhcp实例
+
+2.重启neutron server服务
+systemctl restart neutron-server.service
+
+三.网络节点修改
+1.l3_agent.ini
+[DEFAULT]
+use_namespaces = True
+agent_mode = legacy
+
+2.重启l3 agent服务
+systemctl restart neutron-l3-agent.service
+
+
+四.验证
+1.分别在网络节点上用 ip netns exec qroute-xxx ip a 检查qg-xxxx的网络配置信息。正常情况只有主节点有IP信息，备节点没有
+2.停止主节点l3 agent服务，再用ip netns exec qroute-xxx ip a检查备节点qg-xxxx的网络配置信息

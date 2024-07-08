@@ -1,0 +1,20 @@
+一、网络节点安装配置
+1.安装
+yum install openstack-neutron-lbaas haproxy
+2.配置
+修改 /etc/neutron/lbaas_agent.ini： 
+interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver
+device_driver = neutron.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver
+修改/etc/neutron/neutron.conf：
+service_plugins = router,lbaas
+3.启用，重启
+systemctl enable neutron-lbaas-agent.service
+systemctl start neutron-lbaas-agent.service
+systemctl restart neutron-openvswitch-agent.service
+二、控制节点安装配置
+yum install openstack-neutron-lbaas -y
+修改/etc/neutron/neutron.conf：
+service_plugins = router,lbaas
+[service_providers]
+service_provider = LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.driver.HaproxyDriver:default
+systemctl restart neutron-server.service

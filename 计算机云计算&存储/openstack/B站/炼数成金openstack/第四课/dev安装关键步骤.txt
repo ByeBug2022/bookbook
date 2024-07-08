@@ -1,0 +1,40 @@
+环境说明：操作系统采用ubuntu14.04桌面版，操作系统分配2块网卡（均为桥接模式，学员根据根据自己的实际情况去调整。但调整后记得把local.conf文件更新）。eth0用于访问外网，eth1（不需要分配IP)用于虚拟机。
+
+1.更新源
+sudo vi /etc/apt/source.list
+sudo apt-get update
+2.安装git
+sudo apt-get install git
+3.下载
+sudo git clone -b stable/kilo https://git.openstack.org/openstack-dev/devstack
+4.创建用户
+devstack/tools/create-stack-user.sh; su stack
+5.拷贝devstack目录到/opt/stack下
+7.编辑local.conf
+8.修改devstack目录
+sudo chown -R stack:stack devstack
+9.使用git单独下载源代码
+sudo su - stack
+git clone -b stable/kilo git://git.openstack.org/openstack/horizon.git /opt/stack/horizon
+git clone -b stable/kilo git://git.openstack.org/openstack/keystone.git /opt/stack/keystone
+git clone -b stable/kilo git://git.openstack.org/openstack/nova.git /opt/stack/nova
+git clone -b stable/kilo git://git.openstack.org/openstack/neutron.git /opt/stack/neutron
+git clone -b stable/kilo git://git.openstack.org/openstack/glance.git /opt/stack/glance
+git clone -b stable/kilo git://git.openstack.org/openstack/cinder
+10.修改配置文件
+11.执行安装脚本
+./stack.sh
+12.安装jdk
+a.安装
+cd /opt/stack
+sudo mkdir -p /usr/lib/java
+tar -zxvf jdk-8u65-linux-x64.tar.gz -C /usr/lib/java
+b.配置环境变量
+vi .bashrc
+export JAVA_HOME=/usr/lib/java/jdk1.8.0_65
+export JRE_HOME=${JAVA_HOME}/jre 
+export CLASSPATH=${JAVA_HOME}/lib:${JRE_HOME}/jre:${CLASSPATH} 
+export PATH=${JAVA_HOME}/bin:${PATH}
+13.安装eclipse
+14.安装pydev
+https://marketplace.eclipse.org/content/pydev-python-ide-eclipse

@@ -1,0 +1,29 @@
+一.控制节点
+vi /etc/neutron/neutron.conf
+router_distributed = True
+
+
+二.网络节点
+vi /etc/neutron/l3_agent.ini
+agent_mode = dvr_snat
+
+vi /etc/neutron/plugins/ml2/ml2_conf.ini
+[ml2]
+mechanism_drivers = openvswitch,linuxbridge,l2population
+
+[agent]
+l2_population = True
+enable_distributed_routing = True
+
+
+三.计算节点
+vi /etc/neutron/l3_agent.ini
+agent_mode = dvr
+
+vi /etc/neutron/plugins/ml2/ml2_conf.ini
+[ml2]
+mechanism_drivers = openvswitch,linuxbridge,l2population
+
+[agent]
+l2_population = True
+enable_distributed_routing = True

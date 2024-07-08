@@ -1,0 +1,9 @@
+#API接口规范定义
+http://developer.openstack.org/api-ref.html
+#Python SDK
+http://docs.openstack.org/developer/python-keystoneclient/
+http://docs.openstack.org/developer/python-novaclient/
+http://docs.openstack.org/developer/python-neutronclient/
+http://docs.openstack.org/developer/python-cinderclient/
+http://docs.openstack.org/developer/python-swiftclient/
+http://docs.openstack.org/developer/python-glanceclient/

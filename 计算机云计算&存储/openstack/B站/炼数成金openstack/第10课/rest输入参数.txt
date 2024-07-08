@@ -1,0 +1,26 @@
+{
+    "auth": {
+        "identity": {
+            "methods": [
+                "password"
+            ],
+            "password": {
+                "user": {
+                    "domain": {
+                        "id": "default"
+                    },
+                    "name": "admin",
+                    "password": "passw0rd"
+                }
+            }
+        },
+        "scope": {
+            "project": {
+                "domain": {
+                    "id": "default"
+                },
+                "name": "admin"
+            }
+        }
+    }
+}
